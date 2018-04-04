@@ -6,7 +6,7 @@
 
 /**
  *
- * @author Użytkownik
+ * @author LionArt
  */
 
 import java.util.Scanner;
