@@ -13,7 +13,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class ApplicationHangman {
+class ApplicationHangman
+{
 
     static class FastReader
     {
@@ -213,119 +214,134 @@ public class ApplicationHangman {
             while(lives>0 && answers<maxAnswers)
             {
                 int good=0;
-                char letter=reader.next().charAt(0);
-                System.out.println("Your choice: "+letter);
-                if((letter>64 && letter<133) || (letter>96 && letter<123))
+                char letter;
+                String line;
+                line=reader.next();
+                if (line.length()!=0)
+                letter=line.charAt(0);
+                else
                 {
-                    letter=Character.toUpperCase(letter);
-                    
-                    if(guesses.indexOf(letter)==-1)
+                    break;
+                }
+                {
+                    System.out.println("Your choice: "+letter);
+                    if((letter>64 && letter<133) || (letter>96 && letter<123))
                     {
-                        if(word.indexOf(letter)==-1)
+                        letter=Character.toUpperCase(letter);
+
+                        if(guesses.indexOf(letter)==-1)
                         {
-                            lives--;
-                            if(guesses.equals("-"))
+                            if(word.indexOf(letter)==-1)
                             {
-                                guesses=""+letter;
-                            }
-                            else
-                            guesses=guesses+letter;
-                            good=-1;
-                        }
-                        else 
-                        {
-                            for(int k=0;k<word.length();k++)
-                            {
-                                if(letter==word.charAt(k))
+                                lives--;
+                                if(guesses.equals("-"))
                                 {
-                                    int pos;
-                                    switch(k)
-                                    {
-                                        case 0:
-                                        {
-                                            pos=0;
-                                            break;
-                                        }
-                                        case 1:
-                                        {
-                                            pos=2;
-                                            break;
-                                        }
-                                        default:
-                                        {
-                                            pos=k*2;
-                                            break;
-                                        }
-                                    }
-                                    if(pos==0)
-                                    encrypted=letter+encrypted.substring(1); 
-                                    else
-                                    encrypted=encrypted.substring(0,pos)+letter+encrypted.substring(pos+1);
+                                    guesses=""+letter;
                                 }
+                                else
+                                guesses=guesses+letter;
+                                good=-1;
                             }
-                            if(guesses.equals("-"))
+                            else 
                             {
-                                guesses=""+letter;
+                                for(int k=0;k<word.length();k++)
+                                {
+                                    if(letter==word.charAt(k))
+                                    {
+                                        int pos;
+                                        switch(k)
+                                        {
+                                            case 0:
+                                            {
+                                                pos=0;
+                                                break;
+                                            }
+                                            case 1:
+                                            {
+                                                pos=2;
+                                                break;
+                                            }
+                                            default:
+                                            {
+                                                pos=k*2;
+                                                break;
+                                            }
+                                        }
+                                        if(pos==0)
+                                        encrypted=letter+encrypted.substring(1); 
+                                        else
+                                        encrypted=encrypted.substring(0,pos)+letter+encrypted.substring(pos+1);
+                                    }
+                                }
+                                if(guesses.equals("-"))
+                                {
+                                    guesses=""+letter;
+                                }
+                                else
+                                guesses=guesses+letter;
+                                good=1;
                             }
-                            else
-                            guesses=guesses+letter;
-                            good=1;
+                        }
+                        else
+                        {
+                            System.out.println("You've already guessed that letter!");
+                            lives--;
+                            level=getModifiedLevel(lives,level);
+                            drawLevel(level);
+                            System.out.println();
                         }
                     }
                     else
                     {
-                        System.out.println("You've already guessed that letter!");
+                        System.out.println("Only Latin alphabet letters!");
                         lives--;
                         level=getModifiedLevel(lives,level);
                         drawLevel(level);
                         System.out.println();
                     }
-                }
-                else
-                {
-                    System.out.println("Only Latin alphabet letters!");
-                    lives--;
-                    level=getModifiedLevel(lives,level);
-                    drawLevel(level);
-                    System.out.println();
-                }
-                answers++;
-                if(lives<=0)
-                {
-                    System.out.println("Game Over!");
-                    System.out.println("Secret: "+word);
-                    break;
-                }
-                if(!win(word,encrypted))
-                {
-                    if(good==-1)
+                    answers++;
+                    if(lives<=0)
                     {
-                        System.out.println("Nope!");
-                        level=getModifiedLevel(lives,level);
-                        drawLevel(level);
-                        System.out.println();
-                    }
-                    else if(good==1)
-                    {
-                        System.out.println("Nice!");
-                        System.out.println("Secret word:");
-                        System.out.println(encrypted);
-                        System.out.println();
-                    }
-                    if(answers>=maxAnswers)
-                    {
+                        System.out.println("Game Over!");
+                        System.out.println("Secret: "+word);
+                        for(int k=answers;k<maxAnswers;k++)
+                        {
+                            letter=reader.next().charAt(0);
+                        }
                         break;
                     }
-                    else
+                    if(!win(word,encrypted))
                     {
-                        level=getModifiedLevel(lives,level);
-                        drawGameState(level,encrypted,lives,guesses);
+                        if(good==-1)
+                        {
+                            System.out.println("Nope!");
+                            level=getModifiedLevel(lives,level);
+                            drawLevel(level);
+                            System.out.println();
+                        }
+                        else if(good==1)
+                        {
+                            System.out.println("Nice!");
+                            System.out.println("Secret word:");
+                            System.out.println(encrypted);
+                            System.out.println();
+                        }
+                        if(answers>=maxAnswers)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            level=getModifiedLevel(lives,level);
+                            drawGameState(level,encrypted,lives,guesses);
+                        }
                     }
+                    else
+                    break;
                 }
-                else
-                break;
             }
             System.out.println();
         }
     }
+    
 }
