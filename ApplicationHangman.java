@@ -13,9 +13,6 @@ import java.util.Scanner;
 
 public class ApplicationHangman {
 
-    /**
-     * @param level
-     */
     public static void drawLevel(char level[][])
     {
         for(int i=0;i<14;i++)
@@ -123,7 +120,11 @@ public class ApplicationHangman {
     public static void main(String[] args) 
     {      
         Scanner reader=new Scanner(System.in);
-        int n=reader.nextInt();
+        int n;
+        if(reader.hasNextInt())
+        n=reader.nextInt();
+        else
+        n=0;
         for(int i=0;i<n;i++)
         {
             char initializedLevel [][]={
@@ -143,8 +144,16 @@ public class ApplicationHangman {
             {'+','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','+'},
             };
             char level[][]=initializedLevel;
-            String word=reader.next();
-            int maxAnswers=reader.nextInt();
+            String word;
+            if(reader.hasNext())
+            word=reader.next();
+            else
+            word="";
+            int maxAnswers;
+            if(reader.hasNextInt())
+            maxAnswers=reader.nextInt();
+            else
+            maxAnswers=0;
             int answers=0;
             String encrypted=getEncryptedWord(word);
             String guesses="-";
@@ -219,10 +228,11 @@ public class ApplicationHangman {
                     }
                     else
                     {
-                        System.out.println("You already guessed that letter!");
+                        System.out.println("You've already guessed that letter!");
                         lives--;
                         level=getModifiedLevel(lives,level);
                         drawLevel(level);
+                        System.out.println();
                     }
                 }
                 else
@@ -231,12 +241,14 @@ public class ApplicationHangman {
                     lives--;
                     level=getModifiedLevel(lives,level);
                     drawLevel(level);
+                    System.out.println();
                 }
                 answers++;
                 if(lives<=0)
                 {
                     System.out.println("Game Over!");
                     System.out.println("Secret: "+word);
+                    System.out.println();
                     break;
                 }
                 if(!win(word,encrypted))
@@ -246,6 +258,7 @@ public class ApplicationHangman {
                         System.out.println("Nope!");
                         level=getModifiedLevel(lives,level);
                         drawLevel(level);
+                        System.out.println();
                     }
                     else if(good==1)
                     {
@@ -256,6 +269,7 @@ public class ApplicationHangman {
                     }
                     if(answers>=maxAnswers)
                     {
+                        System.out.println();
                         break;
                     }
                     else
@@ -268,7 +282,6 @@ public class ApplicationHangman {
                 break;
             }
         }
-        
+        reader.close();
     }
-    
 }
