@@ -8,11 +8,70 @@
  *
  * @author LionArt
  */
-
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class ApplicationHangman {
 
+    static class FastReader
+    {
+        BufferedReader br;
+        StringTokenizer st;
+ 
+        public FastReader()
+        {
+            br = new BufferedReader(new
+                     InputStreamReader(System.in));
+        }
+ 
+        String next()
+        {
+            while (st == null || !st.hasMoreElements())
+            {
+                try
+                {
+                    st = new StringTokenizer(br.readLine());
+                }
+                catch (IOException  e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
+ 
+        int nextInt()
+        {
+            return Integer.parseInt(next());
+        }
+ 
+        long nextLong()
+        {
+            return Long.parseLong(next());
+        }
+ 
+        double nextDouble()
+        {
+            return Double.parseDouble(next());
+        }
+ 
+        String nextLine()
+        {
+            String str = "";
+            try
+            {
+                str = br.readLine();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return str;
+        }
+    }
+    
     public static void drawLevel(char level[][])
     {
         for(int i=0;i<14;i++)
@@ -57,7 +116,6 @@ public class ApplicationHangman {
         System.out.println();
         System.out.println("You won!");
         System.out.println("Secret: "+word);
-        System.out.println();
         return true;
     }
     
@@ -119,12 +177,8 @@ public class ApplicationHangman {
     
     public static void main(String[] args) 
     {      
-        Scanner reader=new Scanner(System.in);
-        int n;
-        if(reader.hasNextInt())
-        n=reader.nextInt();
-        else
-        n=0;
+        FastReader reader=new FastReader();
+        int n=reader.nextInt();
         for(int i=0;i<n;i++)
         {
             char initializedLevel [][]={
@@ -144,16 +198,8 @@ public class ApplicationHangman {
             {'+','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','+'},
             };
             char level[][]=initializedLevel;
-            String word;
-            if(reader.hasNext())
-            word=reader.next();
-            else
-            word="";
-            int maxAnswers;
-            if(reader.hasNextInt())
-            maxAnswers=reader.nextInt();
-            else
-            maxAnswers=0;
+            String word=reader.next();
+            int maxAnswers=reader.nextInt();
             int answers=0;
             String encrypted=getEncryptedWord(word);
             String guesses="-";
@@ -248,7 +294,6 @@ public class ApplicationHangman {
                 {
                     System.out.println("Game Over!");
                     System.out.println("Secret: "+word);
-                    System.out.println();
                     break;
                 }
                 if(!win(word,encrypted))
@@ -269,7 +314,6 @@ public class ApplicationHangman {
                     }
                     if(answers>=maxAnswers)
                     {
-                        System.out.println();
                         break;
                     }
                     else
@@ -281,7 +325,7 @@ public class ApplicationHangman {
                 else
                 break;
             }
+            System.out.println();
         }
-        reader.close();
     }
 }
